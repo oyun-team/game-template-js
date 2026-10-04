@@ -1,0 +1,15 @@
+{
+  "slug": "balon-patlat",
+  "title": { "tr": "Balon Patlat", "en": "Pop the Balloons" },
+  "description": {
+    "tr": "30 saniyede patlatabildiğin kadar balon patlat.",
+    "en": "Pop as many balloons as you can in 30 seconds."
+  },
+  "author": "takma-adin",
+  "category": "arcade",
+  "orientation": "portrait",
+  "scores": true,
+  "languages": ["tr", "en"],
+  "thumbnail": "thumbnail.svg",
+  "dir": "game"
+}
