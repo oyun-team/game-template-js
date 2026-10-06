@@ -11,5 +11,15 @@
   "scores": true,
   "languages": ["tr", "en"],
   "thumbnail": "thumbnail.svg",
+  "age": 7,
+  "audience": {
+    "tr": "Hızlı ve kısa bir oyun isteyen her yaştan oyuncu için.",
+    "en": "Players of any age who want a quick, short game."
+  },
+  "benefits": {
+    "tr": "Hızlı tepki vermeyi ve dikkati toplamayı çalıştırır.",
+    "en": "Practises reacting quickly and staying focused."
+  },
+  "skills": ["reflexes", "focus", "timing"],
   "dir": "game"
 }
