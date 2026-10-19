@@ -32,6 +32,11 @@ let score = 0;
 let timeLeft = ROUND_SECONDS;
 let best = null;
 let spawnTimer = 0;
+// For the parent's progress view (game.json "measures"): a game clock that stops while paused,
+// and how many taps hit a balloon.
+let clock = 0;
+let taps = 0;
+let hits = 0;
 
 function startRound() {
   state = "playing";
@@ -39,6 +44,8 @@ function startRound() {
   score = 0;
   timeLeft = ROUND_SECONDS;
   spawnTimer = 0;
+  taps = 0;
+  hits = 0;
 }
 
 function spawn() {
@@ -49,11 +56,14 @@ function spawn() {
     r,
     speed: (H / 6) * (0.7 + Math.random() * 0.8) * (1 + (ROUND_SECONDS - timeLeft) / ROUND_SECONDS),
     color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    seenAt: null, // game clock time when the whole balloon is on screen
   });
 }
 
 async function endRound() {
   state = "over";
+  // Measure: share of taps that hit a balloon. Too few taps say nothing, so they are skipped.
+  if (taps >= 5) OyunSDK.measure("tap_accuracy", (hits / taps) * 100);
   try {
     const result = await OyunSDK.submitScore(score);
     best = result.best;
@@ -68,11 +78,15 @@ canvas.addEventListener("pointerdown", (e) => {
     startRound();
     return;
   }
+  taps++;
   for (let i = balloons.length - 1; i >= 0; i--) {
     const b = balloons[i];
     if (Math.hypot(e.clientX - b.x, e.clientY - b.y) <= b.r * 1.15) {
       balloons.splice(i, 1);
       score++;
+      hits++;
+      // Measure: one try = time from the balloon being fully visible to popping it.
+      if (b.seenAt !== null) OyunSDK.measure("reaction_ms", (clock - b.seenAt) * 1000);
       break;
     }
   }
@@ -84,6 +98,7 @@ OyunSDK.onResume(() => (paused = false));
 
 function update(dt) {
   if (state !== "playing" || paused) return;
+  clock += dt;
   timeLeft -= dt;
   if (timeLeft <= 0) {
     timeLeft = 0;
@@ -95,7 +110,10 @@ function update(dt) {
     spawn();
     spawnTimer = 0.45 + Math.random() * 0.35;
   }
-  for (const b of balloons) b.y -= b.speed * dt;
+  for (const b of balloons) {
+    b.y -= b.speed * dt;
+    if (b.seenAt === null && b.y + b.r <= H) b.seenAt = clock;
+  }
   balloons = balloons.filter((b) => b.y + b.r > 0);
 }
 
