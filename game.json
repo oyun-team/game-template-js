@@ -20,10 +20,10 @@
     "tr": "Hızlı tepki vermeyi ve dikkati toplamayı çalıştırır.",
     "en": "Practises reacting quickly and staying focused."
   },
-  "skills": ["reflexes", "focus", "timing"],
+  "skills": ["reflexes", "focus", "coordination"],
   "measures": [
     { "id": "reaction_ms", "skill": "reflexes", "unit": "ms", "better": "lower", "label": { "tr": "Tepki süresi", "en": "Reaction time" } },
-    { "id": "tap_accuracy", "skill": "focus", "unit": "percent", "better": "higher", "label": { "tr": "İsabetli dokunuş", "en": "Taps on target" } }
+    { "id": "tap_accuracy", "skill": "coordination", "unit": "percent", "better": "higher", "label": { "tr": "İsabetli dokunuş", "en": "Taps on target" } }
   ],
   "dir": "game"
 }
